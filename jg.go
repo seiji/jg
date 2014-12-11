@@ -53,8 +53,8 @@ func Generate(c *cli.Context) {
 			Type: ast.NewIdent(ts),
 			Tag: &ast.BasicLit{
 				ValuePos: token.NoPos,
-				Kind: token.STRING,
-				Value: fmt.Sprintf("`json:\"%s,omitempty\"`", k),
+				Kind:     token.STRING,
+				Value:    fmt.Sprintf("`json:\"%s,omitempty\"`", k),
 			},
 		})
 	}
@@ -74,7 +74,7 @@ func Generate(c *cli.Context) {
 		Name: ast.NewIdent("main"),
 		Decls: []ast.Decl{
 			&ast.GenDecl{
-				Tok: token.TYPE,
+				Tok:   token.TYPE,
 				Specs: types,
 			},
 		},
@@ -86,7 +86,7 @@ func Generate(c *cli.Context) {
 var re = regexp.MustCompile("[0-9A-Za-z]+")
 
 func PascalCase(s string) string {
-	b:= []byte(s)
+	b := []byte(s)
 	values := re.FindAll(b, -1)
 	for i, v := range values {
 		values[i] = bytes.Title(v)
