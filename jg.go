@@ -35,6 +35,11 @@ func Generate(c *cli.Context) {
 	sort.Strings(mk)
 
 	var fields []*ast.Field
+	addTag := ""
+	if c.Bool("omitempty") {
+		addTag = ",omitempty"
+	}
+
 	for _, k := range mk {
 		ts := "string"
 		v := m[k]
@@ -54,7 +59,7 @@ func Generate(c *cli.Context) {
 			Tag: &ast.BasicLit{
 				ValuePos: token.NoPos,
 				Kind:     token.STRING,
-				Value:    fmt.Sprintf("`json:\"%s,omitempty\"`", k),
+				Value:    fmt.Sprintf("`json:\"%s%s\"`", k, addTag),
 			},
 		})
 	}

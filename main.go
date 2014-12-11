@@ -17,6 +17,10 @@ func main() {
 			Value: "User",
 			Usage: "name for the struct",
 		},
+		cli.BoolFlag{
+			Name:  "omitempty, o",
+			Usage: "Add field tag of omitempty",
+		},
 	}
 	app.Run(os.Args)
 }
