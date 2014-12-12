@@ -1,0 +1,22 @@
+machine:
+  timezone:
+    Asia/Tokyo
+  golang:
+    version: 1.3.0
+  environment:
+    CIRCLE_ENV: test
+checkout:
+    post:
+      - git submodule sync
+      - git submodule update --init
+      - go get github.com/tools/godep
+dependencies:
+    override:
+      - godep get
+test:
+  override:
+    - godep go test -v:
+        environment:
+          RAILS_ENV: test
+          RAILS_ENV: test
+
