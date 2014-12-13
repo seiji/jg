@@ -12,11 +12,10 @@ machine:
     GOROOT: /home/ubuntu/go14/go
     GOPATH: /home/ubuntu
     CIRCLE_ENV: test
+    HOME: /home/ubuntu/src/github.com/seiji
   hosts:
     fancy: 127.0.0.1
 checkout:
-  environment:
-    pwd: /home/ubuntu/src/github.com/seiji
   pre:
     - pwd
   post:
@@ -25,17 +24,13 @@ checkout:
     - git submodule update --init
 dependencies:
   pre:
-    - pwd
     - go get golang.org/x/tools/cmd/vet
     - go get github.com/tools/godep
   override:
-    - pwd
     - godep get
 test:
   pre:
-    - pwd
     - go version
   override:
-    - pwd
     - godep go test -v
 
