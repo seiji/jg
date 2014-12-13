@@ -7,7 +7,6 @@ machine:
     - mkdir -p /home/ubuntu/src/github.com/seiji
     - tar -C /home/ubuntu/go14 -xzf go14.tar.gz
     - sudo chmod a+w /home/ubuntu/go14/go
-    - cd /home/ubuntu/src/github.com/seiji
   environment:
     PATH: /home/ubuntu/go14/go/bin:$PATH
     GOROOT: /home/ubuntu/go14/go
@@ -18,6 +17,7 @@ machine:
 checkout:
   pre:
     - pwd
+      pwd: /home/ubuntu/src/github.com/seiji
   post:
     - pwd
     - git submodule sync
