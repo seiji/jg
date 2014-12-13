@@ -6,10 +6,19 @@ import (
 	"github.com/codegangsta/cli"
 )
 
+var (
+	Version string = "HEAD"
+)
+
 func main() {
-	app := cli.NewApp()
+	newApp().Run(os.Args)
+}
+
+func newApp() (app *cli.App) {
+	app = cli.NewApp()
 	app.Name = "jg"
 	app.Usage = "json to go struct"
+	app.Version = Version
 	app.Action = Generate
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
@@ -27,5 +36,5 @@ func main() {
 			Usage: "Name for this package",
 		},
 	}
-	app.Run(os.Args)
+	return
 }

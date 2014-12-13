@@ -17,12 +17,32 @@ import (
 	"github.com/codegangsta/cli"
 )
 
+var (
+	AddTag string = ""
+)
+
 func Generate(c *cli.Context) {
+	in := os.Stdin
+	fi, err := in.Stat()
+	if err != nil {
+		log.Fatal(err)
+		os.Exit(1)
+	}
+
+	if size := fi.Size(); size <= 0 {
+		cli.ShowAppHelp(c)
+		os.Exit(1)
+	}
+
 	var f interface{}
-	dec := json.NewDecoder(os.Stdin)
+	dec := json.NewDecoder(in)
 	if err := dec.Decode(&f); err != nil {
 		log.Fatal(err)
 		os.Exit(1)
+	}
+
+	if c.Bool("omitempty") {
+		AddTag = ",omitempty"
 	}
 
 	var m map[string]interface{}
@@ -40,7 +60,7 @@ func Generate(c *cli.Context) {
 
 	ch := make(chan ast.Spec)
 	go func() {
-		NewType(ch, c, c.String("name"), m)
+		NewType(ch, c.String("name"), m)
 		close(ch)
 	}()
 
@@ -55,14 +75,14 @@ func Generate(c *cli.Context) {
 	}
 
 	file := &ast.File{
-		Name: ast.NewIdent(c.String("package")),
+		Name:  ast.NewIdent(c.String("package")),
 		Decls: types,
 	}
 
 	printer.Fprint(os.Stdout, token.NewFileSet(), file)
 }
 
-func NewType(ch chan ast.Spec, c *cli.Context, name string, m map[string]interface{}) {
+func NewType(ch chan ast.Spec, name string, m map[string]interface{}) {
 	var fields []*ast.Field
 
 	mk := make([]string, len(m))
@@ -72,11 +92,6 @@ func NewType(ch chan ast.Spec, c *cli.Context, name string, m map[string]interfa
 		i++
 	}
 	sort.Strings(mk)
-
-	addTag := ""
-	if c.Bool("omitempty") {
-		addTag = ",omitempty"
-	}
 
 	for _, k := range mk {
 		ts := "string"
@@ -88,7 +103,7 @@ func NewType(ch chan ast.Spec, c *cli.Context, name string, m map[string]interfa
 			case reflect.Map:
 				tName := PascalCase(k)
 				ts = strings.Join([]string{"*", tName}, "")
-				NewType(ch, c, tName, v.(map[string]interface{}))
+				NewType(ch, tName, v.(map[string]interface{}))
 			case reflect.Slice:
 				log.Print("slice", k, t)
 			default:
@@ -108,7 +123,7 @@ func NewType(ch chan ast.Spec, c *cli.Context, name string, m map[string]interfa
 			Tag: &ast.BasicLit{
 				ValuePos: token.NoPos,
 				Kind:     token.STRING,
-				Value:    fmt.Sprintf("`json:\"%s%s\"`", k, addTag),
+				Value:    fmt.Sprintf("`json:\"%s%s\"`", k, AddTag),
 			},
 		})
 	}

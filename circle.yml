@@ -1,21 +1,31 @@
 machine:
   timezone:
     Asia/Tokyo
-  golang: 1.3
+  pre:
+    - curl -o go14.tar.gz -sL https://golang.org/dl/go1.4rc2.linux-amd64.tar.gz
+    - sudo mkdir /usr/local/go14
+    - sudo tar -C /usr/local/go14 -xzf go14.tar.gz
+    - sudo chmod a+w /usr/local/go14/go
   environment:
+    PATH: /usr/local/go14/go/bin:$PATH
+    GOROOT: /usr/local/go14/go
+    GOPATH: /home/ubuntu/.go_project
     CIRCLE_ENV: test
+  hosts:
+    fancy: 127.0.0.1
 checkout:
     post:
       - git submodule sync
       - git submodule update --init
-      - go get github.com/tools/godep
 dependencies:
-    override:
-      - godep get
-test:
+  pre:
+    - go get golang.org/x/tools/cmd/vet
+    - go get github.com/tools/godep
   override:
-    - godep go test -v:
-        environment:
-          RAILS_ENV: test
-          RAILS_ENV: test
+    - godep get
+test:
+  pre:
+    - go version
+  override:
+    - godep go test -v
 
