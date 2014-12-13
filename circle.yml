@@ -3,13 +3,13 @@ machine:
     Asia/Tokyo
   pre:
     - curl -o go14.tar.gz -sL https://golang.org/dl/go1.4rc2.linux-amd64.tar.gz
-    - mkdir /home/ubuntu/go14
+    - mkdir /home/ubuntu/{go14,bin}
     - tar -C /home/ubuntu/go14 -xzf go14.tar.gz
     - sudo chmod a+w /home/ubuntu/go14/go
   environment:
     PATH: /home/ubuntu/go14/go/bin:$PATH
     GOROOT: /home/ubuntu/go14/go
-    GOPATH: /home/ubuntu/.go_project
+    GOPATH: /home/ubuntu
     CIRCLE_ENV: test
   hosts:
     fancy: 127.0.0.1
