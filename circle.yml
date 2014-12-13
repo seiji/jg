@@ -16,8 +16,7 @@ machine:
     fancy: 127.0.0.1
 checkout:
   pre:
-    - pwd
-      pwd: /home/ubuntu/src/github.com/seiji
+    - cd /home/ubuntu/src/github.com/seiji
   post:
     - pwd
     - git submodule sync
