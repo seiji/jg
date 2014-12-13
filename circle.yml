@@ -4,6 +4,7 @@ machine:
   pre:
     - curl -o go14.tar.gz -sL https://golang.org/dl/go1.4rc2.linux-amd64.tar.gz
     - mkdir /home/ubuntu/go14
+    - mkdir -p /home/ubuntu/src/github.com/seiji
     - tar -C /home/ubuntu/go14 -xzf go14.tar.gz
     - sudo chmod a+w /home/ubuntu/go14/go
   environment:
@@ -14,18 +15,27 @@ machine:
   hosts:
     fancy: 127.0.0.1
 checkout:
-    post:
-      - git submodule sync
-      - git submodule update --init
+  environment:
+    pwd: /home/ubuntu/src/github.com/seiji
+  pre:
+    - pwd
+  post:
+    - pwd
+    - git submodule sync
+    - git submodule update --init
 dependencies:
   pre:
+    - pwd
     - go get golang.org/x/tools/cmd/vet
     - go get github.com/tools/godep
   override:
+    - pwd
     - godep get
 test:
   pre:
+    - pwd
     - go version
   override:
+    - pwd
     - godep go test -v
 
