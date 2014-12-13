@@ -4,7 +4,6 @@ machine:
   pre:
     - curl -o go14.tar.gz -sL https://golang.org/dl/go1.4rc2.linux-amd64.tar.gz
     - mkdir /home/ubuntu/go14
-    - mkdir /home/ubuntu/bin
     - tar -C /home/ubuntu/go14 -xzf go14.tar.gz
     - sudo chmod a+w /home/ubuntu/go14/go
   environment:
