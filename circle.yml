@@ -23,6 +23,7 @@ dependencies:
     - go get github.com/tools/godep
     - go get github.com/seiji/jg
   override:
+    - ls -la /home/ubuntu/src/github.com/seiji
     - cd /home/ubuntu/src/github.com/seiji; godep get
 test:
   pre:
