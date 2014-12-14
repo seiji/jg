@@ -10,21 +10,6 @@
 		{
 			"ImportPath": "github.com/stretchr/testify/assert",
 			"Rev": "ae37dedcaae6fce497569786a8694aa3daa97abf"
-		},
-		{
-			"ImportPath": "golang.org/x/tools/go/exact",
-			"Comment": "null-1239",
-			"Rev": "0431b49275be692e8934fe50c2da3e0541e06589"
-		},
-		{
-			"ImportPath": "golang.org/x/tools/go/gcimporter",
-			"Comment": "null-1239",
-			"Rev": "0431b49275be692e8934fe50c2da3e0541e06589"
-		},
-		{
-			"ImportPath": "golang.org/x/tools/go/types",
-			"Comment": "null-1239",
-			"Rev": "0431b49275be692e8934fe50c2da3e0541e06589"
 		}
 	]
 }
