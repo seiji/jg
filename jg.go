@@ -18,10 +18,10 @@ import (
 )
 
 var (
-	AddTag string = ""
+	addTag string = ""
 )
 
-func Generate(c *cli.Context) {
+func generate(c *cli.Context) {
 	in := os.Stdin
 	fi, err := in.Stat()
 	if err != nil {
@@ -42,7 +42,7 @@ func Generate(c *cli.Context) {
 	}
 
 	if c.Bool("omitempty") {
-		AddTag = ",omitempty"
+		addTag = ",omitempty"
 	}
 
 	var m map[string]interface{}
@@ -60,7 +60,7 @@ func Generate(c *cli.Context) {
 
 	ch := make(chan ast.Spec)
 	go func() {
-		NewType(ch, c.String("name"), m)
+		newType(ch, c.String("name"), m)
 		close(ch)
 	}()
 
@@ -82,7 +82,7 @@ func Generate(c *cli.Context) {
 	printer.Fprint(os.Stdout, token.NewFileSet(), file)
 }
 
-func NewType(ch chan ast.Spec, name string, m map[string]interface{}) {
+func newType(ch chan ast.Spec, name string, m map[string]interface{}) {
 	var fields []*ast.Field
 
 	mk := make([]string, len(m))
@@ -101,9 +101,9 @@ func NewType(ch chan ast.Spec, name string, m map[string]interface{}) {
 		if t != nil {
 			switch t.Kind() {
 			case reflect.Map:
-				tName := PascalCase(k)
+				tName := pascalCase(k)
 				ts = strings.Join([]string{"*", tName}, "")
-				NewType(ch, tName, v.(map[string]interface{}))
+				newType(ch, tName, v.(map[string]interface{}))
 			case reflect.Slice:
 				log.Print("slice", k, t)
 			default:
@@ -114,7 +114,7 @@ func NewType(ch chan ast.Spec, name string, m map[string]interface{}) {
 		fields = append(fields, &ast.Field{
 			Names: []*ast.Ident{
 				&ast.Ident{
-					Name:    PascalCase(k),
+					Name:    pascalCase(k),
 					NamePos: token.NoPos,
 					Obj:     ast.NewObj(ast.Var, k),
 				},
@@ -123,7 +123,7 @@ func NewType(ch chan ast.Spec, name string, m map[string]interface{}) {
 			Tag: &ast.BasicLit{
 				ValuePos: token.NoPos,
 				Kind:     token.STRING,
-				Value:    fmt.Sprintf("`json:\"%s%s\"`", k, AddTag),
+				Value:    fmt.Sprintf("`json:\"%s%s\"`", k, addTag),
 			},
 		})
 	}
@@ -140,7 +140,7 @@ func NewType(ch chan ast.Spec, name string, m map[string]interface{}) {
 
 var re = regexp.MustCompile("[0-9A-Za-z]+")
 
-func PascalCase(s string) string {
+func pascalCase(s string) string {
 	b := []byte(s)
 	values := re.FindAll(b, -1)
 	for i, v := range values {

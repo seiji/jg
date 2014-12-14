@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	Version string = "HEAD"
+	version string = "HEAD"
 )
 
 func main() {
@@ -18,8 +18,8 @@ func newApp() (app *cli.App) {
 	app = cli.NewApp()
 	app.Name = "jg"
 	app.Usage = "json to go struct"
-	app.Version = Version
-	app.Action = Generate
+	app.Version = version
+	app.Action = generate
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
 			Name:  "name, n",

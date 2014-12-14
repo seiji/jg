@@ -86,6 +86,14 @@ func main() {
 	}
 }
 
+func TestGithubUsers(t *testing.T) {
+	_TestGenerate(t, "api.github.com/users.json")
+}
+
 func TestGithubUser(t *testing.T) {
 	_TestGenerate(t, "api.github.com/user/seiji.json")
+}
+
+func TestGithubUserStarred(t *testing.T) {
+	_TestGenerate(t, "api.github.com/user/seiji/starred.json")
 }
