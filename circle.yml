@@ -14,8 +14,6 @@ machine:
   hosts:
     fancy: 127.0.0.1
 checkout:
-  pre:
-    - cd /home/ubuntu/src/github.com/seiji
   post:
     - git submodule sync
     - git submodule update --init
