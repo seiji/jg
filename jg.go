@@ -83,8 +83,6 @@ func generate(c *cli.Context) {
 }
 
 func newType(ch chan ast.Spec, name string, m map[string]interface{}) {
-	var fields []*ast.Field
-
 	mk := make([]string, len(m))
 	i := 0
 	for k, _ := range m {
@@ -93,7 +91,8 @@ func newType(ch chan ast.Spec, name string, m map[string]interface{}) {
 	}
 	sort.Strings(mk)
 
-	for _, k := range mk {
+	fields := make([]*ast.Field, len(mk))
+	for i, k := range mk {
 		ts := "string"
 		v := m[k]
 
@@ -111,7 +110,7 @@ func newType(ch chan ast.Spec, name string, m map[string]interface{}) {
 			}
 		}
 
-		fields = append(fields, &ast.Field{
+		fields[i] = &ast.Field{
 			Names: []*ast.Ident{
 				&ast.Ident{
 					Name:    pascalCase(k),
@@ -125,7 +124,7 @@ func newType(ch chan ast.Spec, name string, m map[string]interface{}) {
 				Kind:     token.STRING,
 				Value:    fmt.Sprintf("`json:\"%s%s\"`", k, addTag),
 			},
-		})
+		}
 	}
 	spec := &ast.TypeSpec{
 		Name: ast.NewIdent(name),

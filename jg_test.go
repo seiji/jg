@@ -14,24 +14,21 @@ import (
 	_ "golang.org/x/tools/go/gcimporter"
 )
 
-func _TestGenerate(t *testing.T, path string) {
-	var err error
+func _TestGenerate(path string) (err error) {
 	app := newApp()
 	path = filepath.Join("http", path)
 
 	f, err := os.Open(path)
 	defer f.Close()
 	if err != nil {
-		fmt.Printf("err %+v\n", err)
-		os.Exit(1)
+		return
 	}
 
 	stdin, stdout, stderr := os.Stdin, os.Stdout, os.Stderr
 
 	r, w, err := os.Pipe()
 	if err != nil {
-		fmt.Printf("err %+v\n", err)
-		os.Exit(1)
+		return
 	}
 
 	os.Stdin, os.Stdout, os.Stderr = f, w, w
@@ -77,23 +74,25 @@ func main() {
 	}()
 
 	out, err := exec.Command("go", "run", fileNameUser, fileNameMain).Output()
-
-	assert.Nil(t, err)
 	if err != nil {
-		fmt.Printf("out %+v\n", string(out))
-		fmt.Printf("err %+v\n", err)
-		os.Exit(1)
+		fmt.Printf("out %+v\n", out)
+		return
 	}
+	return
 }
 
 func TestGithubUsers(t *testing.T) {
-	_TestGenerate(t, "api.github.com/users.json")
+	err := _TestGenerate("api.github.com/users.json")
+	assert.Nil(t, err)
 }
 
 func TestGithubUser(t *testing.T) {
-	_TestGenerate(t, "api.github.com/user/seiji.json")
+	err := _TestGenerate("api.github.com/user/seiji.json")
+	assert.Nil(t, err)
 }
 
 func TestGithubUserStarred(t *testing.T) {
-	_TestGenerate(t, "api.github.com/user/seiji/starred.json")
+	err := _TestGenerate("api.github.com/user/seiji/starred.json")
+	assert.Nil(t, err)
 }
+

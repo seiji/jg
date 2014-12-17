@@ -28,4 +28,5 @@ test:
     - go version
   override:
     - godep go test -v -cover
+    # - godep go test -run NONE -bench . -benchmem
 
