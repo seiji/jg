@@ -9,7 +9,6 @@ machine:
   environment:
     PATH: /home/ubuntu/go14/go/bin:$PATH
     GOROOT: /home/ubuntu/go14/go
-    GOPATH: /home/ubuntu
     CIRCLE_ENV: test
   hosts:
     fancy: 127.0.0.1
@@ -23,7 +22,7 @@ dependencies:
     - go get golang.org/x/tools/cmd/cover
     - go get github.com/tools/godep
   override:
-    - godep restore
+    - godep get
 test:
   pre:
     - go version

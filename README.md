@@ -1,9 +1,6 @@
 # jg
 --
-
-# jg
---
-// Emit the package name and an import line (if one is present/needed)
+jg - json to go struct
 
 
 // Emit the package declaration
@@ -13,7 +10,7 @@
 // a functions section, and a types section. In addition, each type may have its own constant,
 // variable, and/or function/method listing.
 
- ... 
+ ...
 // A boolean indicating whether the given package is a command or a plain package
 
 jg
